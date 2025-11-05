@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+
+<body class="bg-light">
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <h3 class="mb-4 text-center">Thông tin người chấm công</h3>
+            <form id="mainForm">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Tên:</label>
+                    <input type="text" id="name" name="name" class="form-control" required />
+                </div>
+
+                <div class="mb-3">
+                    <label for="add" class="form-label">Địa chỉ:</label>
+                    <select id="add" name="add" class="form-select" required>
+                        <% addresses.forEach(addr=> { %>
+                            <option value="<%= addr %>">
+                                <%= addr %>
+                            </option>
+                            <% }); %>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Gửi</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("mainForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const add = document.getElementById("add").value;
+
+            if (!navigator.geolocation) {
+                alert("Trình duyệt không hỗ trợ lấy vị trí.");
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(async (pos) => {
+                const lat = pos.coords.latitude;
+                const long = pos.coords.longitude;
+
+                try {
+                    const res = await fetch(`/form/submit/<%= uuid %>`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ name, add, lat, long }),
+                    });
+
+                    if (res.redirected) {
+                        window.location.href = res.url;
+                    } else {
+                        const data = await res.json();
+
+                        window.location.replace(data.link);
+                    }
+                } catch (err) {
+                    console.error(err);
+                    alert("Lỗi khi gửi form!");
+                }
+            }, () => {
+                alert("Không thể lấy vị trí thiết bị.");
+            });
+        });
+    </script>
+</body>
+
+</html>
