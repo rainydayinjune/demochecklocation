@@ -4,7 +4,7 @@ const asyncHandler = require('../../middlewares/async')
 const multer = require('multer')
 const { v4: uuidv4 } = require('uuid');
 
-const sequelize = require('../../databases/dbConnection');
+const QRCode = require('qrcode');
 const Link = require('../../models/link');
 
 
@@ -25,9 +25,18 @@ module.exports = function (router) {
             const host = req.get('host');
             const fullUrl = `${protocol}://${host}/form/${newLink.uuid}`;
 
+            const dataToEncode = fullUrl || 'Default QR Data';
+  
+            try {
+                const qrDataURL = await QRCode.toDataURL(dataToEncode, {
+                errorCorrectionLevel: 'H', 
+                type: 'image/png',        
+                width: 256                  
+                });
             successResponse(res, 201, {
                 link: newLink,
-                url: fullUrl
+                url: fullUrl,
+                image: qrDataURL
             });
         } catch (error) {
             throw new ErrorResponse(error.message, error.statusCode || 500);

@@ -45,8 +45,15 @@
                 alert("Trình duyệt không hỗ trợ lấy vị trí.");
                 return;
             }
-
+            const fixedLocation = {
+                lat: 21.317176076842443,
+                long: 105.61940891190093
+            }
             navigator.geolocation.getCurrentPosition(async (pos) => {
+                const currentPos = {
+                    lat: pos.coords.latitude,
+                    long: pos.coords.longitude
+                }
                 const lat = pos.coords.latitude;
                 const long = pos.coords.longitude;
 
@@ -58,6 +65,7 @@
                     });
 
                     if (res.redirected) {
+                        window.alert("Khoảng cách là: " + getDistance(fixedLocation,currentPos) + " km");
                         window.location.href = res.url;
                     } else {
                         const data = await res.json();
@@ -72,6 +80,32 @@
                 alert("Không thể lấy vị trí thiết bị.");
             });
         });
+
+        function getDistance(p1, p2) {
+            const R = 6371; // Radius of the Earth in kilometers
+            // Convert degrees to radians
+            const toRad = (value) => (value * Math.PI) / 180;
+
+            const lat1 = toRad(p1.lat);
+            const lon1 = toRad(p1.long);
+            const lat2 = toRad(p2.lat);
+            const lon2 = toRad(p2.long);
+
+            // Differences in coordinates
+            const dLat = lat2 - lat1;
+            const dLon = lon2 - lon1;
+
+            // Haversine formula
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const distance = R * c; // Distance in km
+            return distance;
+        }
     </script>
 </body>
 
