@@ -9,7 +9,7 @@ const Link = require('../../models/link');
 
 
 module.exports = function (router) {
-    router.post('/', asyncHandler(async (req, res, next) => {
+    router.get('/test', asyncHandler(async (req, res, next) => {
         try {
             const { link_url } = req.body;
             if (!link_url) {
@@ -26,13 +26,16 @@ module.exports = function (router) {
             const fullUrl = `${protocol}://${host}/form/${newLink.uuid}`;
 
             const dataToEncode = fullUrl || 'Default QR Data';
-  
+            let qrDataURL = null;
             try {
-                const qrDataURL = await QRCode.toDataURL(dataToEncode, {
-                errorCorrectionLevel: 'H', 
-                type: 'image/png',        
-                width: 256                  
+                qrDataURL = await QRCode.toDataURL(dataToEncode, {
+                    errorCorrectionLevel: 'H',
+                    type: 'image/png',
+                    width: 256
                 });
+            } catch (error) {
+                throw new ErrorResponse(error.message, error.statusCode || 500);
+            }
             successResponse(res, 201, {
                 link: newLink,
                 url: fullUrl,

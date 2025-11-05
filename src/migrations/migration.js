@@ -25,7 +25,7 @@ async function createMigration() {
         // await SystemSetting.sync({ alter: true });
         // await Product.sync({ alter: true });
         // await Blacklist.sync({ alter: true });
-        // await Link.sync({ alter: true });
+        await Link.sync({ alter: true });
         await Timekeeper.sync({ alter: true });
 
     } catch (error) {

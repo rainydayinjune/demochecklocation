@@ -8,7 +8,7 @@ const Timekeeper = db.define('timekeeper', {
         primaryKey: true
     },
     name: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         allowNull: false
     },
     add: {

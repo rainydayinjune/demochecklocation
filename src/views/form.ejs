@@ -49,6 +49,7 @@
                 lat: 21.317176076842443,
                 long: 105.61940891190093
             }
+            console.log('getCurrentPosition')
             navigator.geolocation.getCurrentPosition(async (pos) => {
                 const currentPos = {
                     lat: pos.coords.latitude,
@@ -63,14 +64,14 @@
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ name, add, lat, long }),
                     });
-
-                    if (res.redirected) {
-                        window.alert("Khoảng cách là: " + getDistance(fixedLocation,currentPos) + " km");
-                        window.location.href = res.url;
+                    const data = await res.json();
+                    if (data.link != null) {
+                        alert("Khoảng cách là: " + getDistance(fixedLocation,currentPos) + " km");
+                        window.location.href = data.link;
                     } else {
                         const data = await res.json();
 
-                        window.location.replace(data.link);
+                        // window.location.replace(data.link);
                     }
                 } catch (err) {
                     console.error(err);
