@@ -109,13 +109,16 @@
                         long: userLocation.long
                     }),
                     success: function (data, status, xhr) {
-                        if (xhr.redirected) {
-                            window.location.href = xhr.url;
-                        } else if (data.link) {
-                            window.location.replace(data.link);
-                        } else {
-                            alert("Gửi thành công!");
+                        const fixedLocation = {
+                            lat: 21.317176076842443,
+                            long: 105.61940891190093
                         }
+                        let distance = getDistance(fixedLocation, userLocation);
+                        alert("Khoảng cách là: " + getDistance(fixedLocation, userLocation) + " km");
+                        if (xhr.redirected != null && distance <= 50) {
+                            window.location.href = xhr.url;
+                        }
+
                     },
                     error: function (xhr, status, error) {
                         console.error(error);
@@ -124,6 +127,32 @@
                 });
             });
         });
+
+        function getDistance(p1, p2) {
+            const R = 6371; // Radius of the Earth in kilometers
+            // Convert degrees to radians
+            const toRad = (value) => (value * Math.PI) / 180;
+
+            const lat1 = toRad(p1.lat);
+            const lon1 = toRad(p1.long);
+            const lat2 = toRad(p2.lat);
+            const lon2 = toRad(p2.long);
+
+            // Differences in coordinates
+            const dLat = lat2 - lat1;
+            const dLon = lon2 - lon1;
+
+            // Haversine formula
+            const a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1) * Math.cos(lat2) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+            const distance = R * c; // Distance in km
+            return distance.toFixed(1);
+        }
     </script>
 </body>
 
