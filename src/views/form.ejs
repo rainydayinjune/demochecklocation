@@ -115,8 +115,8 @@
                         }
                         let distance = getDistance(fixedLocation, userLocation);
                         alert("Khoảng cách là: " + getDistance(fixedLocation, userLocation) + " km");
-                        if (xhr.redirected != null && distance <= 50) {
-                            window.location.href = xhr.url;
+                        if (xhr.responseJSON.link != null && distance <= 50) {
+                            window.location.href = xhr.responseJSON.link;
                         }
 
                     },
