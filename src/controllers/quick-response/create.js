@@ -9,7 +9,7 @@ const Link = require('../../models/link');
 
 
 module.exports = function (router) {
-    router.get('/test', asyncHandler(async (req, res, next) => {
+    router.post('/test', asyncHandler(async (req, res, next) => {
         try {
             const { link_url } = req.body;
             if (!link_url) {

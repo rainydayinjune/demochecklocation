@@ -6,7 +6,7 @@
 
 module.exports.successResponse = (res, status, payload) => {
     return res.status(status).json({
-        succes: true,
+        success: true,
         data: payload
     })
 }

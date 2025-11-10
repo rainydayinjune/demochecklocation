@@ -33,6 +33,7 @@ app.use(bodyParser.json());
 
 // Public static file
 app.use(express.static('src/images/public'))
+app.use(express.static('src/public'))
 
 app.set('views', path.join(__dirname, 'src', 'views'));
 app.set('view engine', 'ejs');
