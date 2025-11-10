@@ -1,9 +1,9 @@
 const ErrorResponse = require('../utils/errorResponse')
 const jwt = require('../helpers/jwt.helper')
-const Admin = require('../models/admin')
+// const Admin = require('../models/admin')
 const asyncHandler = require('./async')
-const User = require('../models/user')
-const Blacklist = require('../models/blacklist')
+// const User = require('../models/user')
+// const Blacklist = require('../models/blacklist')
 
 // protected routes
 exports.protect = asyncHandler(asyncHandler(async (req, res, next) => {

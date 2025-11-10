@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const asyncHandler = require('../../middlewares/async');
 const { adminProtect } = require('../../middlewares/auth');
-const Blacklist = require('../../models/blacklist');
+// const Blacklist = require('../../models/blacklist');
 
 /**
  * @api {get} /get-image Lấy ảnh
